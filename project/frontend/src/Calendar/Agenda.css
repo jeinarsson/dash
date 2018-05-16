@@ -1,0 +1,77 @@
+div.agendaDay {
+	margin-bottom: 20px;
+}
+div.agendaDay table {
+	border-spacing: 0px;
+}
+td {
+	margin: 0px;
+	padding: 0px;
+	vertical-align: top;
+}
+div.agendaDay td.agendaDayLabel {
+	width: 100px;
+	text-align: right;
+	border-right: 2px solid #aaa;
+	padding-right: 10px;
+	padding-bottom: 10px;
+}
+div.agendaDay td.agendaDayLabel span.weekday {
+	
+}
+div.agendaDay td.agendaDayLabel span.date {
+	color: #777;
+	font-size: 0.75rem;
+}
+div.agendaDay td.agendaDayLabel span.fromnow {
+	color: #777;
+	font-size: 0.75rem;
+}
+
+div.agendaDay td.agendaDayEvents {
+	width: 500px;
+	padding-left: 10px;
+}
+table.eventRowTable td {
+	padding-bottom: 10px;
+}
+table.eventRowTable td.event-symbol {
+	width: 40px;	
+	text-align: center;
+	overflow: hidden;
+}
+table.eventRowTable td.event-data {
+	text-align: left;
+	
+	overflow: hidden;
+}
+table.eventRowTable span.timestamp {
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+table.eventRowTable span.reminder-text {
+	margin-right: 5px;
+	color: #B33A3A;
+}
+table.eventRowTable i.reminder-icon {
+	margin-right: 5px;
+}
+table.eventRowTable i.reminder-icon.overdue {
+	color: #B33A3A;
+}
+table.eventRowTable i.reminder-icon.today {
+	color: #ffcc00;
+}
+table.eventRowTable tr.passed i.reminder-icon {
+	color: #00cc00;
+}
+
+tr.passed {
+	opacity: .6;
+}
+tr.passed span.summary:after {
+font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+    content: " \f00c";
+}

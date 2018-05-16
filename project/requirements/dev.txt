@@ -1,0 +1,2 @@
+-r common.txt
+click==6.7

@@ -1,0 +1,131 @@
+
+html {
+  
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: #aaa;
+  font-family: "Lato", sans-serif;
+  font-size: 18px;
+  line-height: 1.5rem;
+  -webkit-font-smoothing: antialiased;  
+}
+
+#root {
+  margin: 40px;
+  position: absolute;
+  height: calc(1920px - 80px);
+  width: calc(1080px - 80px);
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-weight: normal;
+}
+h1 {
+  font-size: 2rem;
+}
+
+/**
+ * Region Definitions.
+ */
+
+.region {
+  position: absolute;
+}
+
+.region.fullscreen {
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  right: -60px;
+  bottom: -60px;
+  pointer-events: none;
+}
+
+.region.fullscreen * {
+  pointer-events: auto;
+}
+
+.region.right {
+  right: 0;
+}
+
+.region.top {
+  top: 0;
+}
+
+.region.top .container {
+  margin-bottom: 25px;
+}
+
+.region.bottom .container {
+  margin-top: 25px;
+}
+
+.region.top .container:empty {
+  margin-bottom: 0;
+}
+
+.region.top.center,
+.region.bottom.center {
+  left: 50%;
+  -moz-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+
+.region.bottom {
+  bottom: 0;
+}
+
+.region.bottom .container:empty {
+  margin-top: 0;
+}
+
+.region.bottom.right,
+.region.bottom.center,
+.region.bottom.left {
+  bottom: 100%;
+}
+
+
+.region.third,
+.region.middle.center {
+  width: 100%;
+  text-align: center;
+  -moz-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.region.upper.third {
+  top: 33%;
+}
+
+.region.middle.center {
+  top: 50%;
+}
+
+.region.lower.third {
+  top: 66%;
+}
+
+.region.left {
+  text-align: left;
+}
+
+.region table {
+  border-spacing: 0;
+  border-collapse: separate;
+}

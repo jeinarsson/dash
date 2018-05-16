@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  flask-gunicorn:
+    build: 
+      context: ../.. 
+      dockerfile: environments/dev/flask-gunicorn/Dockerfile
+    command: /usr/local/bin/gunicorn -w 2 -b :8000 --max-requests 1 --reload project.www:app
+    volumes:
+      - ../../project:/src/project
+    ports: 
+      - "8000:8000"
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ../../project/www/static:/www/static
+    depends_on:
+      - flask-gunicorn

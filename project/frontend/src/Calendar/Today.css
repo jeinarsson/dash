@@ -1,0 +1,16 @@
+.Today .Time {
+	font-size: 4rem;
+}
+.Today .Date {
+	font-size: 2rem;
+	font-weight: bold;
+	margin-bottom: 40px;
+}
+.Today table {
+	margin-left:10px;
+	font-size: 1.25rem;
+}
+.Today {
+	margin-bottom: 50px;
+}
+

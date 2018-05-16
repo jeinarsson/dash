@@ -1,0 +1,7 @@
+div.List {
+	width: 400px;
+}
+div.List li.checked {
+	text-decoration: line-through;
+	color: #666;
+}
