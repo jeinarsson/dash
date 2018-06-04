@@ -1,12 +1,9 @@
 from flask import render_template, request, escape, redirect, abort, jsonify
 from project.www import app
-from datetime import datetime
 import json
-from datetime import datetime, timedelta, timezone
-from project.utils.ics import get_events_from_ics
-import urllib.request
 from itertools import groupby
 from todoist.api import TodoistAPI
+import project.utils.events as events
 
 ##
 ## Load config
@@ -30,37 +27,7 @@ def api_index():
 @app.route("/api/events")
 def api_events():
 
-    all_events = []
-    for cal in dc.CALENDARS:
-
-        with urllib.request.urlopen(cal['url']) as response:
-           ics_string = response.read()
-
-        now = datetime.now(timezone.utc)
-        past = now - timedelta(days=30)
-        future = now + timedelta(days=30)
-        events = get_events_from_ics(ics_string, past, future)
-        for e in events:
-            e['calendar']=cal['name']
-            e['color']=cal['color']
-
-        all_events += events
-
-    def sortkey(e):
-        if isinstance(e['startdt'], datetime):
-            return e['startdt'].utctimetuple()
-        else:
-            return e['startdt'].timetuple()
-
-
-    all_events.sort(key=sortkey)
-
-    for e in all_events:
-        # since flask jsonify doesn't handle tz, convert explicitly:
-        e['startdt']=e['startdt'].isoformat()
-        if e['enddt']:
-            e['enddt']=e['enddt'].isoformat()
-
+    all_events = events.get_events()
     return jsonify(all_events)
 
 
