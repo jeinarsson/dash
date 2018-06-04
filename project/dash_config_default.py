@@ -12,6 +12,11 @@ CALENDARS = [
 }
 ]
 
+TWILIO = {
+	'account-sid': 'your-account-sid',
+	'auth-token': 'your-auth-token'
+}
+
 TODOIST = {
 	'apikey': 'your-key',
 	'projects': ['The list']
