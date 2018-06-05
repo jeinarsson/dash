@@ -19,6 +19,13 @@ def api_index():
 def api_events():
 
     all_events = events.get_events(db_session)
+
+    for e in all_events:
+        # since flask jsonify doesn't handle tz, convert explicitly:
+        e['startdt']=e['startdt'].isoformat()
+        if e['enddt']:
+            e['enddt']=e['enddt'].isoformat()
+    
     return jsonify(all_events)
 
 
