@@ -14,8 +14,8 @@ def get_events(db_session):
        ec.data = fetch_events()
        ec.timestamp = datetime.now()
        db_session.commit()
-
     return ec.data
+
 def fetch_events():
     all_events = []
     for cal in dc.CALENDARS:

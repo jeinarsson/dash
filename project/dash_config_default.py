@@ -15,7 +15,8 @@ CALENDARS = [
 
 TWILIO = {
 	'account-sid': 'your-account-sid',
-	'auth-token': 'your-auth-token'
+	'auth-token': 'your-auth-token',
+	'phone-number': '+12345678910'
 }
 
 TODOIST = {
