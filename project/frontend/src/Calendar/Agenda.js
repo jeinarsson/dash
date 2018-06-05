@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import emoji from 'react-easy-emoji'
 
 import './Agenda.css'
 
@@ -60,7 +61,7 @@ export function eventTr(now) {
     return (
       <tr key={idx} className={trClass}>
       <td className='event-symbol'><span style={{color: d.color}}>[{d.calendar[0]}]</span></td>
-      <td className='event-data'>{reminderIcon}{reminderText}{timestamp}<span className='summary'>{d.summary}</span></td>
+      <td className='event-data'>{reminderIcon}{reminderText}{timestamp}<span className='summary'>{emoji(d.summary)}</span></td>
       </tr>
       );
   }
