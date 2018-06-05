@@ -5,4 +5,4 @@ RUN pip install -r requirements/dev.txt
 
 EXPOSE 8000
 
-WORKDIR /src
+WORKDIR /dash

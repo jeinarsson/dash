@@ -1,6 +1,7 @@
 
 # Defaults - override in environment_variables_user.sh (not in git repo)
-export DATABASE_URL='sqlite:///data/dash.db'
+export DASH_HOME='/dash'
+export DATABASE_URL='sqlite:///'$DASH_HOME'/data/dash.db'
 
 
 # Source user environment variables if they exist

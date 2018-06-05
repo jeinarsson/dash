@@ -4,12 +4,18 @@ import icalendar
 from dateutil import tz
 from dateutil.rrule import *
 import project.dash_config as dc
+from project.db.models import *
 
+def get_events(db_session):
 
+    ec = db_session.query(EventsCache).one()
+    if (datetime.now()-ec.timestamp).total_seconds() > dc.CALENDAR_CACHE_TIME:
+       print('updating events cache')
+       ec.data = fetch_events()
+       ec.timestamp = datetime.now()
+       db_session.commit()
 
-def get_events():
-    return fetch_events()
-
+    return ec.data
 def fetch_events():
     all_events = []
     for cal in dc.CALENDARS:

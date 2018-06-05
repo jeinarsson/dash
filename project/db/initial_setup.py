@@ -9,6 +9,7 @@ from sqlalchemy.schema import (
     )
 import project.db as db
 import os
+from datetime import datetime
 
 from project.db.models import *
 
@@ -71,9 +72,17 @@ def create_from_empty(database_url = None):
     # add any initial data
     s = db.make_session(database_url)
 
+    e = EventsCache()
+    e.timestamp = datetime.min
+    e.data = None
+    s.add(e)
+    
     s.commit()
 
 
     print('Done.')
 
+
+if __name__ == '__main__':
+    create_from_empty()
     

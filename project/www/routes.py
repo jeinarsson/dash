@@ -1,11 +1,10 @@
 from flask import render_template, request, escape, redirect, abort, jsonify
-from project.www import app
+from project.www import app, db_session
 import json
 from itertools import groupby
 from todoist.api import TodoistAPI
 import project.utils.events as events
 import project.dash_config as dc
-
 
 ##
 ## Routes
@@ -19,7 +18,7 @@ def api_index():
 @app.route("/api/events")
 def api_events():
 
-    all_events = events.get_events()
+    all_events = events.get_events(db_session)
     return jsonify(all_events)
 
 

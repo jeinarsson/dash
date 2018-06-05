@@ -1,3 +1,4 @@
+CALENDAR_CACHE_TIME = 5*60 # seconds
 CALENDAR_COLORS = ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854']
 CALENDARS = [
 {

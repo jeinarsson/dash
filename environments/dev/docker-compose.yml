@@ -7,7 +7,8 @@ services:
       dockerfile: environments/dev/flask-gunicorn/Dockerfile
     command: [ "sh", "-c", "cd project/scripts && ./run_gunicorn_dev.sh" ]
     volumes:
-      - ../../project:/src/project
+      - ../../project:/dash/project
+      - ../../data:/dash/data
     ports: 
       - "8000:8000"
 
