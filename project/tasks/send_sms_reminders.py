@@ -16,45 +16,19 @@ def send(to, body):
 
 
 s = make_session()
-
-all_events = events.get_events(s)
-
-today = date.today()
-now = datetime.now(timezone.utc)
-def is_due(e):
-	if e['allday']:
-		return e['startdt'] <= today and e['enddt'] > today
-	else:
-		return e['startdt'] <= now and e['enddt'] >= now
-
-def is_overdue(e):
-	if e['allday']:
-		return e['enddt'] <= today
-	else:
-		return e['enddt'] < now		
+(due, overdue) = events.get_reminders(s)
 
 
-all_reminders = list(filter(lambda e: e['is_reminder'] and not e['reminder_is_done'], all_events))
-
-due = list(filter(is_due, all_reminders))
-overdue = list(filter(is_overdue, all_reminders))
-
-cal_lookup = { c['name']: c for c in dc.CALENDARS }
+for e in due:
+	body = "" + e['summary'].replace('#do', '').strip()
+	body=body[0:160]
+	if 'reminders-text' in e:
+		for to in e['reminders-text']:
+			send(to, body)
 
 for e in overdue:
 	body = "! " + e['summary'].replace('#do', '').strip()
 	body=body[0:160]
-	cal=cal_lookup[e['calendar']]
-	if 'reminders-text' in cal:
-		numbers = cal['reminders-text']
-		for to in numbers:
+	if 'reminders-text' in e:
+		for to in e['reminders-text']:
 			send(to, body)
-
-for e in due:
-	body = e['summary'].replace('#do', '').strip()
-	body=body[0:100]
-	cal=cal_lookup[e['calendar']]
-	if 'reminders-text' in cal:
-		numbers = cal['reminders-text']
-		for to in numbers:
-			send(to, body)			

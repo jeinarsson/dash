@@ -19,6 +19,10 @@ TWILIO = {
 	'phone-number': '+12345678910'
 }
 
+SENDGRID = {
+	'api-key': 'your-key'
+}
+
 TODOIST = {
 	'apikey': 'your-key',
 	'projects': ['The list']

@@ -174,4 +174,38 @@ def get_events_from_ics(ics_string, window_start, window_end):
                 })
 
     events.sort(key=lambda e: e['startdt'].timetuple())
-    return events    
+    return events  
+
+
+def get_reminders(db_session):
+    all_events = get_events(db_session)
+
+    today = date.today()
+    now = datetime.now(timezone.utc)
+    def is_due(e):
+        if e['allday']:
+            return e['startdt'] <= today and e['enddt'] > today
+        else:
+            return e['startdt'] <= now and e['enddt'] >= now
+
+    def is_overdue(e):
+        if e['allday']:
+            return e['enddt'] <= today
+        else:
+            return e['enddt'] < now     
+
+
+    all_reminders = list(filter(lambda e: e['is_reminder'] and not e['reminder_is_done'], all_events))
+
+    cal_lookup = { c['name']: c for c in dc.CALENDARS }
+    for e in all_reminders:
+        cal=cal_lookup[e['calendar']]
+        if 'reminders-text' in cal:
+            e['reminders-text'] = cal['reminders-text']        
+        if 'reminders-email' in cal:
+            e['reminders-email'] = cal['reminders-email']        
+
+    due = list(filter(is_due, all_reminders))
+    overdue = list(filter(is_overdue, all_reminders))
+
+    return (due, overdue)
