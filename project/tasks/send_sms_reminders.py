@@ -12,6 +12,7 @@ phone_number = dc.TWILIO['phone-number']
 def send(to, body):
 	client = Client(account_sid, auth_token)
 	message = client.messages.create(body=body, from_=phone_number, to=to)
+	print('sent', to, body)
 
 
 s = make_session()
@@ -37,15 +38,6 @@ all_reminders = list(filter(lambda e: e['is_reminder'] and not e['reminder_is_do
 
 due = list(filter(is_due, all_reminders))
 overdue = list(filter(is_overdue, all_reminders))
-
-
-print('All:')
-print([e['summary'] for e in all_reminders])
-print('Due:')
-print([e['summary'] for e in due])
-print('')
-print('Overdue:')
-print([e['summary'] for e in overdue])
 
 cal_lookup = { c['name']: c for c in dc.CALENDARS }
 
