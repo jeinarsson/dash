@@ -5,7 +5,7 @@ services:
     build: 
       context: ../.. 
       dockerfile: environments/dev/flask-gunicorn/Dockerfile
-    command: /usr/local/bin/gunicorn -w 2 -b :8000 --max-requests 1 --reload project.www:app
+    command: project/scripts/run_gunicorn_dev.sh
     volumes:
       - ../../project:/src/project
     ports: 
