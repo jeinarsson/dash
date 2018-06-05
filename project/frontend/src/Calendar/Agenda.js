@@ -17,13 +17,30 @@ export function eventTr(now) {
 
     let reminderIconClass = 'reminder-icon';
     let reminderText = null;
-    if (d.is_reminder && d.startdt.isBefore(now,'day')) {
+
+    function is_due(e) {
+      if (e.allday) {
+        return e.startdt.isSameOrBefore(now,'day') && e.enddt.isAfter(now, 'day');
+      } else {
+        return e.startdt < now && e.enddt > now;
+      }
+    }
+
+    function is_overdue(e) {
+      if (e.allday) {
+        return e.enddt.isSameOrBefore(now, 'day');
+      } else {
+        return e.enddt < now;
+      }
+    }
+
+    if (d.is_reminder && is_overdue(d)) {
       reminderIconClass += ' overdue'
       reminderText = (
         <span className='reminder-text'>{now.diff(d.startdt,'days')} days overdue</span>
         )
     }
-    if (d.startdt.isSame(now,'day')) {
+    if (d.is_reminder && is_due(d)) {
       reminderIconClass += ' today'
     }
 
