@@ -3,11 +3,7 @@ from datetime import date, datetime, timedelta, timezone
 import icalendar
 from dateutil import tz
 from dateutil.rrule import *
-
-try:
-    import project.dash_config as dc
-except ModuleNotFoundError as e:
-    import project.dash_config_default as dc
+import project.dash_config as dc
 
 
 

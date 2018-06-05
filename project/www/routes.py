@@ -4,15 +4,7 @@ import json
 from itertools import groupby
 from todoist.api import TodoistAPI
 import project.utils.events as events
-
-##
-## Load config
-##
-
-try:
-    import project.dash_config as dc
-except ModuleNotFoundError as e:
-    import project.dash_config_default as dc
+import project.dash_config as dc
 
 
 ##

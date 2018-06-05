@@ -5,7 +5,7 @@ services:
     build: 
       context: ../.. 
       dockerfile: environments/dev/flask-gunicorn/Dockerfile
-    command: project/scripts/run_gunicorn_dev.sh
+    command: [ "sh", "-c", "cd project/scripts && ./run_gunicorn_dev.sh" ]
     volumes:
       - ../../project:/src/project
     ports: 
