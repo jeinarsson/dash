@@ -37,8 +37,4 @@ for e in overdue:
 		for to in e['reminders-email']:
 			send(to, subject, body)
 
-
-
-
-
-
+print('done.')
