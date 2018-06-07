@@ -37,8 +37,12 @@ export function eventTr(now) {
 
     if (d.is_reminder && is_overdue(d)) {
       reminderIconClass += ' overdue'
+      let text = d.enddt.toNow(true);
+      if (d.allday) {
+        text = d.enddt.clone().subtract(1,'days').toNow(true);
+      }
       reminderText = (
-        <span className='reminder-text'>{now.diff(d.startdt,'days')} days overdue</span>
+        <span className='reminder-text'>{text} overdue</span>
         )
     }
     if (d.is_reminder && is_due(d)) {
