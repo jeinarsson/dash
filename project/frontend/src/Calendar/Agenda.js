@@ -35,7 +35,7 @@ export function eventTr(now) {
       }
     }
 
-    if (d.is_reminder && is_overdue(d)) {
+    if (d.is_reminder && !d.reminder_is_done && is_overdue(d)) {
       reminderIconClass += ' overdue'
       let text = d.enddt.toNow(true);
       if (d.allday) {
