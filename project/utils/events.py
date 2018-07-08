@@ -1,5 +1,5 @@
 import urllib.request
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, time, datetime, timedelta, timezone
 import icalendar
 from dateutil import tz
 from dateutil.rrule import *
@@ -89,17 +89,29 @@ def get_events_from_ics(ics_string, window_start, window_end):
         events.append(e)
 
     def get_recurrent_datetimes(recur_rule, start, exclusions):
+        
+        
         rules = rruleset()
         first_rule = rrulestr(recur_rule, dtstart=start)
         rules.rrule(first_rule)
+
         if not isinstance(exclusions, list):
             exclusions = [exclusions]
 
-        for xdt in exclusions:
-            try:
+        for xdts in exclusions:
+            if xdts is None:
+                continue
+
+            for xdt in xdts.dts:
+
+                # dateutil rrule does not handle exdate of type DATE, so
+                # hack workaround is to combine the exdate with time(0,0)
+                # to make it a datetime matching what the rrule generator generates.
+                # See https://github.com/dateutil/dateutil/issues/275
+                if not isinstance(xdt.dt, datetime):
+                    xdt.dt = datetime.combine(xdt.dt, time(0,0))
+                    
                 rules.exdate(xdt.dt)
-            except AttributeError:
-                pass
 
         dates = []
        
@@ -152,17 +164,26 @@ def get_events_from_ics(ics_string, window_start, window_end):
         if vevent.get('rrule'):
 
             reoccur = vevent.get('rrule').to_ical().decode('utf-8')
-            for d in get_recurrent_datetimes(reoccur, startdt, exdate):
-                new_e = {
-                    'startdt': d,      
-                    'allday': allday,                  
-                    'summary': summary,
-                    'desc': description,
-                    'loc': location
-                    }
-                if enddt:
-                    new_e['enddt'] = d + (enddt-startdt)                        
-                append_event(new_e)
+            try:
+                for d in get_recurrent_datetimes(reoccur, startdt, exdate):
+                    new_e = {
+                        'startdt': d,      
+                        'allday': allday,                  
+                        'summary': summary,
+                        'desc': description,
+                        'loc': location
+                        }
+                    if enddt:
+                        new_e['enddt'] = d + (enddt-startdt)                        
+                    append_event(new_e)
+            except Exception as err:
+                print(err)
+                print(summary)
+                print(reoccur)
+                print([x.dt for x in exdate.dts])
+                print(startdt)
+                print(isinstance(startdt,datetime))
+                raise err
         else:
             append_event({
                 'startdt': startdt,
