@@ -60,8 +60,7 @@ def get_events_from_ics(ics_string, window_start, window_end):
     window_start_date = window_start.date()
     window_end_date = window_end.date()
 
-    def append_event(e):
-
+    def finalize_event(e):
         e['is_reminder'] = event_is_reminder(e)
         e['reminder_is_done'] = e['is_reminder'] and reminder_is_done(e)
 
@@ -78,15 +77,20 @@ def get_events_from_ics(ics_string, window_start, window_end):
 
         # don't add events that begin after window
         if e['startdt'] > win_end:
-            return
+            return False
 
         # don't add events that end before window, except reminders
         if not (e['is_reminder'] and not e['reminder_is_done']):
             if e['enddt']:
                 if e['enddt'] < win_start:
-                    return
+                    return False
+        
+        return True
 
-        events.append(e)
+    def append_event(e):
+
+        if finalize_event(e):
+            events.append(e)
 
     def get_recurrent_datetimes(recur_rule, start, exclusions):
         
@@ -140,13 +144,23 @@ def get_events_from_ics(ics_string, window_start, window_end):
         cal.walk()
         )
 
+    def extract_ical_datetime(ical_prop):
+        d = ical_prop.dt
+        if getattr(d, 'tzinfo', False):
+            # convent pytz timezone info to dateutil tz
+            zone = tz.gettz(str(d.tzinfo))
+            d=d.replace(tzinfo=zone)        
 
+        return d
+
+    # list of updates to instances of recurrent events
+    recurrent_updates = []
 
     for vevent in calevents:
         summary = str(vevent.get('summary'))
         description = str(vevent.get('description'))
         location = str(vevent.get('location'))
-        startdt = vevent.get('dtstart').dt
+        startdt = extract_ical_datetime(vevent.get('dtstart'))
     
         allday = False
         if not isinstance(startdt, datetime):
@@ -154,33 +168,28 @@ def get_events_from_ics(ics_string, window_start, window_end):
     
         enddt = None
         if not vevent.get('dtend') is None:
-            enddt = vevent.get('dtend').dt
+            enddt = extract_ical_datetime(vevent.get('dtend'))
         else:
             enddt = startdt
     
-        if getattr(startdt, 'tzinfo', False):
-            # convent pytz timezone info to dateutil tz
-            zone = tz.gettz(str(startdt.tzinfo))
-            startdt=startdt.replace(tzinfo=zone)
-
-        if getattr(enddt, 'tzinfo', False):
-            # convent pytz timezone info to dateutil tz
-            zone = tz.gettz(str(enddt.tzinfo))
-            enddt=enddt.replace(tzinfo=zone)
-
-
         exdate = vevent.get('exdate')
         if vevent.get('rrule'):
 
             reoccur = vevent.get('rrule').to_ical().decode('utf-8')
+            uid = str(vevent.get('UID'))
+            sequence = vevent.get('sequence')
+
             try:
                 for d in get_recurrent_datetimes(reoccur, startdt, exdate):
                     new_e = {
-                        'startdt': d,      
+                        'startdt': d,
                         'allday': allday,                  
                         'summary': summary,
                         'desc': description,
-                        'loc': location
+                        'loc': location,
+                        'is_recurring': True,
+                        'uid': uid,
+                        'sequence': sequence
                         }
                     if enddt:
                         new_e['enddt'] = d + (enddt-startdt)                        
@@ -194,14 +203,36 @@ def get_events_from_ics(ics_string, window_start, window_end):
                 print(isinstance(startdt,datetime))
                 raise err
         else:
-            append_event({
+            new_event = {
                 'startdt': startdt,
                 'enddt': enddt,
                 'allday': allday,
                 'summary': summary,
                 'desc': description,
-                'loc': location
-                })
+                'loc': location,
+                'is_recurring': False
+                }
+            
+            if not vevent.get('recurrence-id'): # normal one off event
+                append_event(new_event)
+            else:
+                new_event['recurrence-id'] = extract_ical_datetime(vevent.get('recurrence-id'))
+                new_event['uid'] = str(vevent.get('uid'))
+                new_event['sequence'] = vevent.get('sequence')
+                new_event['is_recurring'] = True
+                recurrent_updates.append(new_event)
+
+    for e in filter(lambda x: x['is_recurring'], events):
+        for update in recurrent_updates:
+            if not e['startdt'] == update['recurrence-id']:
+                continue
+            if not e['uid'] == update['uid']:
+                continue
+            if not e['sequence'] == update['sequence']:
+                continue
+            e.update(update)
+            e['is_recurring_updated'] = True
+            finalize_event(e)
 
     events.sort(key=lambda e: e['startdt'].timetuple())
     return events  
