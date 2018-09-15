@@ -90,7 +90,10 @@ def get_events_from_ics(ics_string, window_start, window_end):
 
     def get_recurrent_datetimes(recur_rule, start, exclusions):
         
-        
+        allday = True
+        if isinstance(start, datetime):
+            allday = False
+
         rules = rruleset()
         first_rule = rrulestr(recur_rule, dtstart=start)
         rules.rrule(first_rule)
@@ -117,11 +120,16 @@ def get_events_from_ics(ics_string, window_start, window_end):
        
         win_start = window_start
         win_end = window_end
-        if not isinstance(start, datetime):
+        if not isinstance(start, datetime): # dateutil rrule expects datetime, not date
             win_start = datetime(year=win_start.year, month=win_start.month, day=win_start.day)
             win_end = datetime(year=win_end.year, month=win_end.month, day=win_end.day)
         for d in rules.between(win_start, win_end):
-            dates.append(d)
+            # if startdt is date, truncate result to date, too.
+            if allday:
+                dates.append(d.date())
+            else:
+                dates.append(d)
+
         return dates
 
 
@@ -131,6 +139,7 @@ def get_events_from_ics(ics_string, window_start, window_end):
     calevents = filter(lambda c: c.name == 'VEVENT',
         cal.walk()
         )
+
 
 
     for vevent in calevents:
@@ -230,3 +239,18 @@ def get_reminders(db_session):
     overdue = list(filter(is_overdue, all_reminders))
 
     return (due, overdue)
+
+
+def main():
+    f = open('project/test-ics/test.ics', 'r')
+    s = f.read()
+    now = datetime.now(timezone.utc)
+    past = now - timedelta(days=30)
+    future = now + timedelta(days=10)
+    events = get_events_from_ics(s, past, future)
+    for e in events:
+        if "pay rent" in e['summary']:
+            print(e)
+
+if __name__ == '__main__':
+        main()    
