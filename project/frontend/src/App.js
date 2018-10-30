@@ -9,7 +9,8 @@ import Today from './Calendar/Today';
 import ListsProvider from './Lists/ListsProvider';
 import List from './Lists/List';
 
-
+import Log from './Log';
+import { appendLog } from './Log';
 import './App.css';
 
 
@@ -47,7 +48,9 @@ return (
         <div className="region lower third"><div className="container"><br/></div></div>
         <div className="region bottom left"><div className="container"></div></div>
         <div className="region bottom center"><div className="container"></div></div>
-        <div className="region bottom right"><div className="container"></div></div>
+        <div className="region bottom right"><div className="container">
+        <Log/>
+        </div></div>
         <div className="region fullscreen above"><div className="container"></div></div>
         </div>
     )

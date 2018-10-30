@@ -11,3 +11,8 @@ export const setTime = (time) => ({
   type: 'SET_TIME',
   time: time
 });
+export const addLog = (s) => ({
+  type: 'ADD_LOG',
+  message: s
+});
+

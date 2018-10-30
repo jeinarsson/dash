@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { setTime } from './actions/'
+import { appendLog } from './Log'
 
 class TimeProvider {
     constructor(dispatch, interval) {
@@ -27,6 +28,7 @@ class TimeProvider {
         this.dispatch(setTime(moment()));
 
         this.restartTimer();
+
     }    
 }
 

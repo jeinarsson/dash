@@ -1,5 +1,7 @@
 import moment from 'moment'
 import { setEvents } from '../actions/'
+import { appendLog } from '../Log';
+
 class EventProvider {
     constructor(dispatch, interval) {
     	this.dispatch = dispatch;
@@ -26,7 +28,7 @@ class EventProvider {
         fetch('/api/events')
           .then(response => {
             if (!response.ok) {
-              throw Error("Network request failed")
+              appendLog('Request to /api/events failed: ' + response.status + ' ' + response.statusText)
             }
             return response
           })

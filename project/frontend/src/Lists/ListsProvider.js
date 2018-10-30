@@ -1,5 +1,7 @@
 import moment from 'moment'
 import { setLists } from '../actions/'
+import { appendLog } from '../Log';
+
 class ListsProvider {
     constructor(dispatch, interval) {
     	this.dispatch = dispatch;
@@ -26,7 +28,6 @@ class ListsProvider {
         fetch('/api/lists')
           .then(response => {
             if (!response.ok) {
-              console.log(response)
               this.restartTimer();
             }
             return response

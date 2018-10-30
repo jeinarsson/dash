@@ -20,7 +20,18 @@ const lists = (state = [], action) => {
 const time = (state = moment(), action) => {
   switch (action.type) {
     case 'SET_TIME':
-    	return action.time
+      return action.time
+    default:
+      return state
+  }
+}
+const log_messages = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_LOG':
+      let timestamp = moment().format('L LTS');
+      let new_state = state.slice(0,5)
+      new_state.splice(0,0,timestamp + ' ' + action.message)
+      return new_state
     default:
       return state
   }
@@ -28,10 +39,12 @@ const time = (state = moment(), action) => {
 
 
 
+
 const rootReducer = combineReducers({
 	events,
   lists,
-	time
+  time,
+  log_messages
 })
 
 export default rootReducer

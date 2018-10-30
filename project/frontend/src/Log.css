@@ -1,0 +1,9 @@
+div.Log {
+	width: 400px;
+}
+div.Log ul {
+	list-style: none;
+	font-size: .7rem;
+	line-height: 1rem;
+	color: #666;
+}
