@@ -228,7 +228,7 @@ def get_events_from_ics(ics_string, window_start, window_end):
                 continue
             if not e['uid'] == update['uid']:
                 continue
-            if not e['sequence'] == update['sequence']:
+            if not e['sequence'] <= update['sequence']:
                 continue
             e.update(update)
             e['is_recurring_updated'] = True
