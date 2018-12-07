@@ -6,8 +6,8 @@ import TimeProvider from './TimeProvider'
 import Month from './Calendar/Month';
 import Agenda from './Calendar/Agenda';
 import Today from './Calendar/Today';
-import ListsProvider from './Lists/ListsProvider';
-import List from './Lists/List';
+import PlayingNow from './PlayingNow/PlayingNow';
+import PlayingNowProvider from './PlayingNow/PlayingNowProvider';
 
 import Log from './Log';
 import { appendLog } from './Log';
@@ -22,7 +22,8 @@ constructor(props) {
     this.dataProviders = [
         new EventProvider(dispatch, 10*60*1000),
         // new ListsProvider(dispatch, 10*60*1000),
-        new TimeProvider(dispatch, 10*1000)
+        new TimeProvider(dispatch, 10*1000),
+        new PlayingNowProvider(dispatch, 5*1000)
     ]
 }
 componentDidMount() {
@@ -49,6 +50,7 @@ return (
         <div className="region bottom left"><div className="container"></div></div>
         <div className="region bottom center"><div className="container"></div></div>
         <div className="region bottom right"><div className="container">
+        <PlayingNow/>
         <Log/>
         </div></div>
         <div className="region fullscreen above"><div className="container"></div></div>

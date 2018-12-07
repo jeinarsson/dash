@@ -9,6 +9,7 @@ const events = (state = [], action) => {
       return state
   }
 }
+
 const lists = (state = [], action) => {
   switch (action.type) {
     case 'SET_LISTS':
@@ -17,6 +18,17 @@ const lists = (state = [], action) => {
       return state
   }
 }
+
+const playing_now = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_PLAYING_NOW':
+      return action.playing_now
+    default:
+      return state
+  }
+}
+
+
 const time = (state = moment(), action) => {
   switch (action.type) {
     case 'SET_TIME':
@@ -43,6 +55,7 @@ const log_messages = (state = [], action) => {
 const rootReducer = combineReducers({
 	events,
   lists,
+  playing_now,
   time,
   log_messages
 })

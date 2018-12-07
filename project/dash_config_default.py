@@ -27,3 +27,7 @@ TODOIST = {
 	'apikey': 'your-key',
 	'projects': ['The list']
 }
+
+SONOS = {
+	'ip': '192.168.0.9'
+}

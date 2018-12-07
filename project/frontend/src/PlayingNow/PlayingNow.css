@@ -1,0 +1,18 @@
+div.albumart {
+    float: left;
+    padding: 10px;
+}
+div.albumart > img {
+    width: 100px;
+    border-radius: 5px;
+    opacity: .7;
+}
+div.meta {
+    padding: 10px;
+}
+div.meta > p.title {
+    font-weight: bold;
+}
+div.meta > p.artist-album {
+    opacity: .7;
+}

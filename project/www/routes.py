@@ -5,7 +5,7 @@ from itertools import groupby
 from todoist.api import TodoistAPI
 import project.utils.events as events
 import project.dash_config as dc
-
+import project.utils.sonos as sonos
 ##
 ## Routes
 ## 
@@ -28,6 +28,10 @@ def api_events():
     
     return jsonify(all_events)
 
+@app.route("/api/sonos/playing")
+def api_sonos_playing():
+
+    return jsonify(sonos.get_playing())
 
 def todoist_item_to_dash(it):
     return {
